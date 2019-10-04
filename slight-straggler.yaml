@@ -1,0 +1,34 @@
+name: slight-straggler
+
+includes:
+  - resource: false
+    file: "common.yaml"
+    override: false
+
+# spout definitions
+spouts:
+  - id: spout
+    className: com.dataflow.storm.spout.RandomNumberSpout
+    constructorArgs:
+      - 1    # ms pause between sending nums
+      - 5    # min number
+      - 5    # range for random number added to min
+    parallelism: 1
+
+# bolt definitions
+bolts:
+  - id: processor
+    className: com.dataflow.storm.variance.Processor
+    constructorArgs:
+      - straggler  # mode (default, straggler, randomStraggler)
+      - 25         # random number between 1 to N of messages to wait before we simulate straggler
+      - 30         # range for random number added to min
+    parallelism: 4
+
+# stream definitions
+streams:
+  - name: spout -> processor
+    from: spout
+    to: processor
+    grouping:
+      type: SHUFFLE

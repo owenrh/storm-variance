@@ -1,0 +1,11 @@
+config:
+  topology.workers: 4
+
+#  topology.executor.receive.buffer.size: 1024
+#  backpressure.disruptor.high.watermark: 0.95
+#  backpressure.disruptor.low.watermark: 0.94
+
+# uncomment to push metrics to Elasticsearch
+#  topology.metrics.consumer.register:
+#    - class: "com.dataflow.storm.MetricsConsumer"
+#      parallelism.hint: 1
